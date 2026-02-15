@@ -1,0 +1,231 @@
+#!/bin/sh
+
+echo 512 > /proc/sys/vm/min_free_kbytes
+
+export MODULES_PATH=/ipc/modules
+export WIFI_PATH=$MODULES_PATH/wifi
+
+# presetmotor
+support_presetmotor="`cat /rom/device.config | grep "support_preset_motor_drive=1"`"
+#support_pelcod_ptz="`cat /rom/device.config | grep "support_pelcod_ptz=1"`"
+if [ -n "${support_presetmotor}" ];then
+	echo "Patch: The motor drive gpio is multiplexed with the gpio of uart1, and it is changed to output at this time."
+	echo 6 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio6/direction
+	echo 0 > /sys/class/gpio/gpio6/value
+	echo 7 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio7/direction
+	echo 0 > /sys/class/gpio/gpio7/value
+fi
+
+#sensor
+insmod $MODULES_PATH/ak_i2c.ko
+insmod $MODULES_PATH/ak_ion.ko
+insmod $MODULES_PATH/ak_uio.ko
+insmod $MODULES_PATH/ak_isp.ko
+find $MODULES_PATH -maxdepth 1 -type f -name "sensor_*.ko" -exec insmod {} check_id=1 \;
+
+#usb
+insmod $MODULES_PATH/cfg80211.ko
+insmod $MODULES_PATH/ak_hcd.ko
+sleep 1
+
+#eth0
+insmod $MODULES_PATH/ak_eth.ko
+
+#adc
+insmod $MODULES_PATH/ak_saradc.ko
+
+#tf card in rc.local
+rmmod ak_mci
+insmod $MODULES_PATH/ak_mci.ko
+
+#audio
+insmod $MODULES_PATH/ak_pcm.ko
+
+ifconfig eth0 up
+
+# wifi or 4g power 
+support_4g="`cat /rom/device.config | grep "support_4g_module=1"`"
+echo 0  > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio0/direction
+if [ -z ${support_4g} ];then
+	echo "# is wifi module"
+	echo 0 > /sys/class/gpio/gpio0/value
+	echo "gpio0 = `cat /sys/class/gpio/gpio0/value`"
+	sleep 1
+	echo 1 > /sys/class/gpio/gpio0/value
+	echo "gpio0 = `cat /sys/class/gpio/gpio0/value`"
+	sleep 1
+else
+	echo "# is 4g module"
+	echo 1 > /sys/class/gpio/gpio0/value
+	sleep 1
+	echo 0 > /sys/class/gpio/gpio0/value
+	sleep 1
+	#devmem 0x20170000 32 0x02000001
+	#devmem 0x2017000c 32 0x02000000
+fi
+
+#sleep 1
+#mmc_test -F &
+#echo -e "\e[1;32mstart mmc_test\e[0m"
+
+lsusb
+
+wifi_8188fu_vid_pid="0bda:f179"
+wifi_9083h_vid_pid="2310:9086"
+wifi_8811au_vid_pid="0bda:c811"
+wifi_8731au_vid_pid="0bda:8731"
+wifi_atbm603x_vid_pid="007a:8888"
+wifi_rda5995_vid_pid="1e04:8888"
+wifi_ssv6x5x_vid_pid="8065:6000"
+
+_4G_EC200_vid_pid="2c7c:6026"
+_4G_EC200U_vid_pid="2c7c:0901"
+_4G_EC200S_vid_pid="2c7c:6002"
+_4G_CLM920_vid_pid="1286:4e3c"
+_4G_720SG_vid_pid="1286:4e3d"
+_4G_720UG_vid_pid="1782:4e00"
+_4G_A7600_vid_pid="1e0e:9011"
+_4G_MC9X9_vid_pid="2cb7:0c03"
+a=0
+while [ $a -lt 6 ]
+do
+	usb_device_result_8188fu=`lsusb | grep $wifi_8188fu_vid_pid`
+	usb_device_result_9083h=`lsusb | grep $wifi_9083h_vid_pid`
+	usb_device_result_8811au=`lsusb | grep $wifi_8811au_vid_pid`
+	usb_device_result_8731au=`lsusb | grep $wifi_8731au_vid_pid`
+	usb_device_result_atbm603x=`lsusb | grep $wifi_atbm603x_vid_pid`
+	usb_device_result_rda5995=`lsusb | grep $wifi_rda5995_vid_pid`
+	usb_device_result_ssv6x5x=`lsusb | grep $wifi_ssv6x5x_vid_pid`
+	usb_device_result_4G_EC200=`lsusb | grep $_4G_EC200_vid_pid`
+	usb_device_result_4G_EC200U=`lsusb | grep $_4G_EC200U_vid_pid`
+	usb_device_result_4G_EC200S=`lsusb | grep $_4G_EC200S_vid_pid`
+	usb_device_result_4G_CLM920=`lsusb | grep $_4G_CLM920_vid_pid`
+	usb_device_result_4G_720SG=`lsusb | grep $_4G_720SG_vid_pid`
+	usb_device_result_4G_720UG=`lsusb | grep $_4G_720UG_vid_pid`
+	usb_device_result_4G_A7600=`lsusb | grep $_4G_A7600_vid_pid`
+	usb_device_result_4G_MC9X9=`lsusb | grep $_4G_MC9X9_vid_pid`
+
+	if [ "$usb_device_result_8188fu" != "" ]
+	then
+	    echo -e "\e[1;32mWifi type: 8188fu\e[0m"
+	    insmod $WIFI_PATH/8188fu.ko
+		break
+	elif [ "$usb_device_result_9083h" != "" ]
+	then
+	    echo -e "\e[1;32mWifi type: 9083h\e[0m"
+	    insmod $WIFI_PATH/9083h.ko
+		break
+	elif [ "$usb_device_result_8811au" != "" ]
+	then
+	    echo -e "\e[1;32mWifi type: 8731au\e[0m"
+	    insmod $WIFI_PATH/8731au.ko
+		break
+	elif [ "$usb_device_result_8731au" != "" ]
+	then
+	    echo -e "\e[1;32mWifi type: 8731au\e[0m"
+	    insmod $WIFI_PATH/8731au.ko
+		break
+	elif [ "$usb_device_result_atbm603x" != "" ]
+	then
+	    echo -e "\e[1;32mWifi type: atbm603x\e[0m"
+	    insmod $WIFI_PATH/atbm603x.ko
+		break
+	elif [ "$usb_device_result_rda5995" != "" ]
+	then
+	    echo -e "\e[1;32mWifi type: rda5995\e[0m"
+	    insmod $WIFI_PATH/rdawfmac.ko
+		break
+	elif [ "$usb_device_result_ssv6x5x" != "" ]
+	then
+	    echo -e "\e[1;32mWifi type: ssv6x5x\e[0m"
+	    insmod $MODULES_PATH/mac80211.ko
+	    sleep 1
+	    insmod $WIFI_PATH/ssv6x5x.ko stacfgpath=$WIFI_PATH/ssv6x5x-wifi.cfg
+		break
+	elif [ "$usb_device_result_4G_EC200" != "" ] ;then
+		echo -e "\e[1;32m4G type: EC200\e[0m"
+		break
+	elif [ "$usb_device_result_4G_EC200U" != "" ] ;then
+		echo -e "\e[1;32m4G type: EC200U\e[0m"
+		break
+	elif [ "$usb_device_result_4G_EC200S" != "" ] ;then
+		echo -e "\e[1;32m4G type: EC200S\e[0m"
+		break
+	elif [ "$usb_device_result_4G_CLM920" != "" ] ;then
+		echo -e "\e[1;32m4G type: CLM920\e[0m"
+		break
+	elif [ "$usb_device_result_4G_720SG" != "" ] ;then
+		echo -e "\e[1;32m4G type: 720SG\e[0m"
+		break
+	elif [ "$usb_device_result_4G_720UG" != "" ] ;then
+		echo -e "\e[1;32m4G type: 720UG\e[0m"
+		break
+	elif [ "$usb_device_result_4G_A7600" != "" ] ;then
+		echo -e "\e[1;32m4G type: A7600\e[0m"
+		break
+	elif [ "$usb_device_result_4G_MC9X9" != "" ] ;then
+		echo -e "\e[1;32m4G type: MC9X9\e[0m"
+		break
+	else
+		echo -e "\e[1;31mWifi or 4G type: unknown\e[0m"    
+		if [ $a = "3" ];then
+			if [ -z ${support_4g} ];then
+				echo "# is wifi module"
+				echo 0 > /sys/class/gpio/gpio0/value
+				echo "gpio0 = `cat /sys/class/gpio/gpio0/value`"
+			fi
+		fi
+		a=`expr $a + 1`
+		sleep 2
+	fi
+
+done
+
+ifconfig wlan0 up
+# record wifi power enable level
+if [ $? -eq 0 ];then
+	_dir="`cat /sys/class/gpio/gpio0/value`" 
+	echo $_dir > /tmp/wifi_power_on
+	if [ $_dir -eq 1 ];then
+		echo 0 > /tmp/wifi_power_off
+	elif [ $_dir -eq 0 ];then
+		echo 1 > /tmp/wifi_power_off
+	fi
+elif [ -z ${support_4g} ];then
+	echo 0 > /tmp/wifi_power_on
+	echo 1 > /tmp/wifi_power_off
+fi
+
+#stop ipc
+read -t 1 -p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Input q enter:" getout
+if [[ "$getout" == "q" ]];
+then           
+	echo ~~~~~~~~~~~~~~~~~~~~~~~~~~exit success~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	exit 0;
+fi
+
+if [ -b /dev/mmcblk0p1 ]; then
+    echo "Detected TF Card"
+    mount /dev/mmcblk0p1 /mnt/disc1
+	if [ -f /mnt/disc1/.uImage_AnykaV330L ]; then
+		echo "Detected .uImage_AnykaV330L will remove it."
+		rm -f /mnt/disc1/.uImage_AnykaV330L
+		sync
+	fi
+	umount /mnt/disc1/
+fi
+
+IPC_EXE=/ipc/ipc
+
+if [ -x ${IPC_EXE} ]; then
+	CalibrateTime_File=/ipc/DateWhenIpcRunning.sh
+    echo -e "\nRunning $CalibrateTime_File"
+    sh $CalibrateTime_File
+    /ipc/bin/sdcard_recovery &
+	${IPC_EXE} &
+else
+	echo "ERROR: \"${IPC_EXE}\" are NOT executable!"
+fi

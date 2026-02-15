@@ -1,0 +1,456 @@
+Booting Linux on physical CPU 0x0
+Linux version 4.4.192V2.1 (keith@maoerhao) (gcc version 4.9.4 (Buildroot 2018.02.7_V1.0.05-gec2d034) ) #1 Tue Aug 23 11:53:16 CST 2022
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=0005317f
+CPU: VIVT data cache, VIVT instruction cache
+Machine model: ak3918ev330 dev board
+Memory policy: Data cache writeback
+ANYKA CPU AK39XXEV330 (ID 0x20160101)
+On node 0 totalpages: 16384
+free_area_init_node: node 0, pgdat c0472ba4, node_mem_map c3f68000
+  Normal zone: 128 pages used for memmap
+  Normal zone: 0 pages reserved
+  Normal zone: 16384 pages, LIFO batch:3
+pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
+pcpu-alloc: [0] 0 
+Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 16256
+Kernel command line: console=ttySAK0,115200n8 root=/dev/mtdblock5 rootfstype=squashfs init=/sbin/init mtdparts=spi0.0:200K@0x0(UBOOT),4K@0x32000(ENV),4K@0x33000(ENVBK),48K@0x34000(DTB),1664K@0x40000(KERNEL),1536K@0x1E0000(ROOTFS),512K@0x360000(CONFIG),4224K@0x3E0000(APP),8192K@0x0(FLASH) mem=64M memsize=64M
+PID hash table entries: 256 (order: -2, 1024 bytes)
+Dentry cache hash table entries: 8192 (order: 3, 32768 bytes)
+Inode-cache hash table entries: 4096 (order: 2, 16384 bytes)
+Memory: 27156K/65536K available (3238K kernel code, 123K rwdata, 1044K rodata, 140K init, 189K bss, 38380K reserved, 0K cma-reserved)
+Virtual kernel memory layout:
+    vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+    fixmap  : 0xffc00000 - 0xfff00000   (3072 kB)
+    vmalloc : 0xc4800000 - 0xff800000   ( 944 MB)
+    lowmem  : 0xc0000000 - 0xc4000000   (  64 MB)
+    modules : 0xbf000000 - 0xc0000000   (  16 MB)
+      .text : 0xc0008000 - 0xc0436d44   (4284 kB)
+      .init : 0xc0437000 - 0xc045a000   ( 140 kB)
+      .data : 0xc045a000 - 0xc0478e40   ( 124 kB)
+       .bss : 0xc0478e40 - 0xc04a8478   ( 190 kB)
+SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+NR_IRQS:126
+ak39ev330_clk: CPU(JCLK): 804(Mhz) 
+ak39ev330_clk: MEMDDR2(DPHY): 402(Mhz) 
+ak39ev330_clk: VCLK: 320(Mhz)
+ak-timer: ak_timer_init
+clocksource: ak_cs_timer: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 159271703898 ns
+sched_clock: 32 bits at 12MHz, resolution 83ns, wraps every 178956970966ns
+Calibrating delay loop... 400.58 BogoMIPS (lpj=2002944)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes)
+CPU: Testing write buffer coherency: ok
+Setting up static identity map for 0x80008400 - 0x8000843c
+devtmpfs: initialized
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+futex hash table entries: 256 (order: -1, 3072 bytes)
+pinctrl core: initialized pinctrl subsystem
+NET: Registered protocol family 16
+DMA: preallocated 256 KiB pool for atomic coherent allocations
+On-chip L2 memory initialized
+ak-pinctrl 20170000.gpio: ak_pinctrl_probe 1958
+ak_ev330_pinctrl: ak_pinctrl_probe irq: 15
+gpiochip_add: registered GPIOs 0 to 85 on device: ak-pinctrl
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+media: Linux media interface: v0.10
+Linux video capture interface: v2.00
+clocksource: Switched to clocksource ak_cs_timer
+NET: Registered protocol family 2
+TCP established hash table entries: 1024 (order: 0, 4096 bytes)
+TCP bind hash table entries: 1024 (order: 0, 4096 bytes)
+TCP: Hash tables configured (established 1024 bind 1024)
+UDP hash table entries: 256 (order: 0, 4096 bytes)
+UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+NET: Registered protocol family 1
+squashfs: version 4.0 (2009/01/31) Phillip Lougher
+jffs2: version 2.2. © 2001-2006 Red Hat, Inc.
+yaffs: yaffs Installing.
+io scheduler noop registered (default)
+AKxx uart driver init, (c) 2013 ANYKA
+20130000.uart0: ttySAK0 at MMIO 0x20130000 (irq = 10, base_baud = 10000000) is a AK
+console [ttySAK0] enabled
+20138000.uart1: ttySAK1 at MMIO 0x20138000 (irq = 11, base_baud = 10000000) is a AK
+loop: module loaded
+Start to init Anyka SPI Flash...
+init Anyka SPI Nand Flash driver
+of_get_named_gpiod_flags: parsed 'cs-gpios' property of node '/soc/spi0@20120000[0]' - status (0)
+spi0 new hz is 40000000, div is 2(change).
+ak spiflash probe enter.
+akspi flash ID: 0x00c22017
+ak-spiflash spi0.0: kh25l64 (8192 Kbytes)
+9 cmdlinepart partitions found on MTD device spi0.0
+Creating 9 MTD partitions on "spi0.0":
+0x000000000000-0x000000032000 : "UBOOT"
+0x000000032000-0x000000033000 : "ENV"
+0x000000033000-0x000000034000 : "ENVBK"
+0x000000034000-0x000000040000 : "DTB"
+0x000000040000-0x0000001e0000 : "KERNEL"
+0x0000001e0000-0x000000360000 : "ROOTFS"
+0x000000360000-0x0000003e0000 : "CONFIG"
+0x0000003e0000-0x000000800000 : "APP"
+0x000000000000-0x000000800000 : "FLASH"
+Init AK SPI Flash finish.
+akspi master SPI0 initialize success, use for PIO mode.
+PPP generic driver version 2.4.2
+PPP BSD Compression module registered
+PPP Deflate Compression module registered
+PPP MPPE Compression module registered
+NET: Registered protocol family 24
+usbcore: registered new interface driver usbserial
+usbcore: registered new interface driver option
+usbserial: USB Serial support registered for GSM modem (1-port)
+i2c /dev entries driver
+ak_wdt_init: watchdog register...
+NET: Registered protocol family 17
+sctp: Hash tables configured (established 512 bind 1024)
+ak_serial_startup: Not support Hardware flow control
+VFS: Mounted root (squashfs filesystem) readonly on device 31:5.
+devtmpfs: mounted
+Freeing unused kernel memory: 140K
+ak_mci: loading out-of-tree module taints kernel.
+AK MCI Driver  Module_init
+of_get_named_gpiod_flags: parsed 'detect-gpio' property of node '/soc/mmc0@20100000[0]' - status (0)
+akmci 20100000.mmc0: host->gpio_cd=82
+akmci 20100000.mmc0: akmci_probe : MCI
+card_status@probe =1.(1=CARD_PLUGED, 0=CARD_UNPLUGED)
+of_get_named_gpiod_flags: parsed 'power-pins' property of node '/soc/mmc0@20100000[0]' - status (0)
+[default setting] enable tf_card circuit using gpio42 with gpio_val 0
+of_get_named_gpiod_flags: can't parse 'cd-gpios' property of node '/soc/mmc0@20100000[0]'
+of_get_named_gpiod_flags: can't parse 'cd-gpio' property of node '/soc/mmc0@20100000[0]'
+akmci 20100000.mmc0: lookup for GPIO cd failed
+of_get_named_gpiod_flags: can't parse 'wp-gpios' property of node '/soc/mmc0@20100000[0]'
+of_get_named_gpiod_flags: can't parse 'wp-gpio' property of node '/soc/mmc0@20100000[0]'
+akmci 20100000.mmc0: lookup for GPIO wp failed
+akmci 20100000.mmc0: gclk = 160000000 Hz. div_l=199, div_h=199
+akmci 20100000.mmc0: ios->clock = 400000 Hz. host->bus_clock = 400000 Hz
+akmci 20100000.mmc0: Mci0 Interface.using l2dma. detect mode:gpio detect.
+exFAT: file-system version 2.2.0-3arter97
+mmc0: host does not support reading read-only switch, assuming write-enable
+akmci 20100000.mmc0: gclk = 160000000 Hz. div_l=1, div_h=1
+akmci 20100000.mmc0: ios->clock = 50000000 Hz. host->bus_clock = 40000000 Hz
+mmc0: new high speed SDHC card at address 0001
+mmcblk0: mmc0:0001 SD04G 3.75 GiB 
+ mmcblk0: p1
+random: nonblocking pool is initialized
+exe (336): drop_caches: 3
+ak-i2c 20150000.i2c0: interval_scale property is not exist
+i2c-0:  AK I2C adapter
+ak_uio: register uio device successfully with irq: 2!
+number of ak video subdev: 1
+ak_camera_probe 717
+set_pinctrl_vi pinctrl_lookup_state couldn't find csi0_sclk state
+ak_camera_probe 725
+c2399_probe Apr  8 2021 13:55:36
+of_get_named_gpiod_flags: parsed 'reset-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (0)
+of_get_named_gpiod_flags: parsed 'pwdn-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (-22)
+wait_xfer_write: NACK
+wait_xfer_write: NACK
+id:ffffff91
+c2399_match fail
+c3390_probe Jun  8 2021 11:44:38
+of_get_named_gpiod_flags: parsed 'reset-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (0)
+of_get_named_gpiod_flags: parsed 'pwdn-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (-22)
+wait_xfer_write: NACK
+wait_xfer_write: NACK
+id:ffffff91
+c3390_match fail
+gc2063_probe Sep 26 2021 09:24:24
+of_get_named_gpiod_flags: parsed 'reset-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (0)
+of_get_named_gpiod_flags: parsed 'pwdn-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (-22)
+gc2063_sensor_set_power_on_func 1466
+gc2063_sensor_set_power_on_func 1473
+gc2063_read client:c3afeb00, addr:37
+wait_xfer_write: NACK
+gc2063_read client:c3afeb00, addr:37
+wait_xfer_write: NACK
+id:ffffff91
+gc2063_match fail
+h63_probe Sep  7 2021 11:54:11
+of_get_named_gpiod_flags: parsed 'reset-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (0)
+of_get_named_gpiod_flags: parsed 'pwdn-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (-22)
+wait_xfer_write: NACK
+wait_xfer_write: NACK
+h63_match fail
+sc1345_probe Dec 22 2021 15:11:29
+of_get_named_gpiod_flags: parsed 'reset-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (0)
+of_get_named_gpiod_flags: parsed 'pwdn-gpio' property of node '/soc/i2c0@20150000/camera@0x30[0]' - status (-22)
+id:da23
+i2c i2c-0: sc1345 Probed success, subdev:c0fd8a14
+sensor_sys_init
+ak-hshcd 20200000.usb: Anyka usb host controller
+ak-hshcd 20200000.usb: new USB bus registered, assigned bus number 1
+ak-hshcd 20200000.usb: irq 18, io mem 0x20200000
+usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb1: Product: Anyka usb host controller
+usb usb1: Manufacturer: Linux 4.4.192V2.1 ak-hshcd
+usb usb1: SerialNumber: Anyka usb host controller
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+ak-hshcd 20200000.usb: Usb otg-hs controller driver initialized
+####connent happen @ 4294938687
+usb 1-1: new high-speed USB device number 2 using ak-hshcd
+usb 1-1: New USB device found, idVendor=0bda, idProduct=f179
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: 802.11n
+usb 1-1: Manufacturer: Realtek
+usb 1-1: SerialNumber: 00e04c000001
+ak_mac Ethernet Driver
+Configed MAC RMII interface!
+of_get_named_gpiod_flags: parsed 'reset-gpios' property of node '/soc/ethernet@20300000[0]' - status (0)
+ak39_ethernet 20300000.ethernet eth0: irq 16, mapped at c4a48000
+ak39_ethernet 20300000.ethernet: using random MAC address 06:2c:02:69:a5:3b
+insmod mac device ok
+mmc0: card 0001 removed
+AK MCI Driver  Module_init
+of_get_named_gpiod_flags: parsed 'detect-gpio' property of node '/soc/mmc0@20100000[0]' - status (0)
+akmci 20100000.mmc0: host->gpio_cd=82
+akmci 20100000.mmc0: akmci_probe : MCI
+card_status@probe =1.(1=CARD_PLUGED, 0=CARD_UNPLUGED)
+of_get_named_gpiod_flags: parsed 'power-pins' property of node '/soc/mmc0@20100000[0]' - status (0)
+[default setting] enable tf_card circuit using gpio42 with gpio_val 0
+of_get_named_gpiod_flags: can't parse 'cd-gpios' property of node '/soc/mmc0@20100000[0]'
+of_get_named_gpiod_flags: can't parse 'cd-gpio' property of node '/soc/mmc0@20100000[0]'
+akmci 20100000.mmc0: lookup for GPIO cd failed
+of_get_named_gpiod_flags: can't parse 'wp-gpios' property of node '/soc/mmc0@20100000[0]'
+of_get_named_gpiod_flags: can't parse 'wp-gpio' property of node '/soc/mmc0@20100000[0]'
+akmci 20100000.mmc0: lookup for GPIO wp failed
+akmci 20100000.mmc0: gclk = 160000000 Hz. div_l=199, div_h=199
+akmci 20100000.mmc0: ios->clock = 400000 Hz. host->bus_clock = 400000 Hz
+akmci 20100000.mmc0: Mci0 Interface.using l2dma. detect mode:gpio detect.
+[15931]:[akpcm_init:751]: akpcm_init... 
+of_get_named_gpiod_flags: can't parse 'speak-gpios' property of node '/soc/adc_dac@20110000[0]'
+[15932]:[akpcm_probe:576]: SPEAKER @-2(lv 0) 
+[15932]:[akpcm_class_setup:215]: akpcm: pcm_major 0xf9 
+[15932]:[akpcm_playback_runtime_init]: playback_runtime pcm(0xc0f5ea80) rt 0xc0effc00 dev 0 
+[15933]:[akpcm_probe:603]: adc_list:1 
+[15933]:[akpcm_capture_runtime_init]: capture_runtime pcm(0xc0f5ea80) rt 0xc0c5a800 dev 1 
+[15933]:[akpcm_loopback_runtime_init]: loopback_runtime pcm(0xc0f5ea80) rt 0xc0c5a400 
+[15934]:[akpcm_probe:672]: successful! 
+mmc0: host does not support reading read-only switch, assuming write-enable
+akmci 20100000.mmc0: gclk = 160000000 Hz. div_l=1, div_h=1
+akmci 20100000.mmc0: ios->clock = 50000000 Hz. host->bus_clock = 40000000 Hz
+mmc0: new high speed SDHC card at address 0001
+mmcblk0: mmc0:0001 SD04G 3.75 GiB 
+ mmcblk0: p1
+Reset MAC controller!
+phy read phy id1 waiting ok,data=0x937c
+phy read phy id2 waiting ok,data=0x4024
+cdh:id other set!
+Autonegotiation Failed
+eth0 owns a shared interrupt on netdev->irq 16
+setting up the cable unplug timer
+usbcore: registered new interface driver rtl8188fu
+FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+sh (557): drop_caches: 3
+FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+ispdrv_init 3712
+dma alloc vir:0xc4c11000, phy:0x80b34000
+isp_module_init: isp_drv_lib-V0.2.3-H3B
+isp2 module init: isp_struct size=48748, dma_area=0xc4c11000, dma_bytes=12624, io_base=f0010000
+dma alloc vir:0xc4c16000, phy:0x80b38000
+
+dual 8568B dma Addr:0x80b38000
+isp2_module_init cb:c0b17d3c, sensor_cb:c0fd8b18, reg_base:f0010000, isp_struct:c4c04000, isp_id:0
+isp_id:0
+all:2159230976-0
+stat:2159238800-0
+3d:0
+dual:2159247360-11763712
+isp_wait_capture_pause wait event ret:-110 isp_id:0
+ispdrv_uninit 3747
+isp_vi_stop_capturing 2457
+isp_vi_stop_capturing 2460
+isp2_module_fini 6651, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+isp2_module_fini 6665, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+dma free vir:0xc4c16000, phy:0x80b38000, bytes=8568
+dma free vir:0xc4c11000, phy:0x80b34000, bytes=12624
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_init 3712
+dma alloc vir:0xc4c11000, phy:0x80b34000
+isp_module_init: isp_drv_lib-V0.2.3-H3B
+isp2 module init: isp_struct size=48748, dma_area=0xc4c11000, dma_bytes=12624, io_base=f0010000
+dma alloc vir:0xc4c16000, phy:0x80b38000
+
+dual 8568B dma Addr:0x80b38000
+isp2_module_init cb:c0b17d3c, sensor_cb:c0fd8b18, reg_base:f0010000, isp_struct:c4c1a000, isp_id:0
+isp_id:0
+all:2159230976-0
+stat:2159238800-0
+3d:0
+dual:2159247360-11763712
+isp_wait_capture_pause wait event ret:-110 isp_id:0
+ispdrv_uninit 3747
+isp_vi_stop_capturing 2457
+isp_vi_stop_capturing 2460
+isp2_module_fini 6651, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+isp2_module_fini 6665, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+dma free vir:0xc4c16000, phy:0x80b38000, bytes=8568
+dma free vir:0xc4c11000, phy:0x80b34000, bytes=12624
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_init 3712
+dma alloc vir:0xc4c11000, phy:0x80b34000
+isp_module_init: isp_drv_lib-V0.2.3-H3B
+isp2 module init: isp_struct size=48748, dma_area=0xc4c11000, dma_bytes=12624, io_base=f0010000
+dma alloc vir:0xc4c16000, phy:0x80b38000
+
+dual 8568B dma Addr:0x80b38000
+isp2_module_init cb:c0b17d3c, sensor_cb:c0fd8b18, reg_base:f0010000, isp_struct:c4c27000, isp_id:0
+isp_id:0
+all:2159230976-0
+stat:2159238800-0
+3d:0
+dual:2159247360-11763712
+isp_wait_capture_pause wait event ret:-110 isp_id:0
+ispdrv_uninit 3747
+isp_vi_stop_capturing 2457
+isp_vi_stop_capturing 2460
+isp2_module_fini 6651, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+isp2_module_fini 6665, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+dma free vir:0xc4c16000, phy:0x80b38000, bytes=8568
+dma free vir:0xc4c11000, phy:0x80b34000, bytes=12624
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_init 3712
+dma alloc vir:0xc4c11000, phy:0x80b34000
+isp_module_init: isp_drv_lib-V0.2.3-H3B
+isp2 module init: isp_struct size=48748, dma_area=0xc4c11000, dma_bytes=12624, io_base=f0010000
+dma alloc vir:0xc4c16000, phy:0x80b38000
+
+dual 8568B dma Addr:0x80b38000
+isp2_module_init cb:c0b17d3c, sensor_cb:c0fd8b18, reg_base:f0010000, isp_struct:c4c34000, isp_id:0
+isp_id:0
+all:2159230976-0
+stat:2159238800-0
+3d:0
+dual:2159247360-11763712
+isp_wait_capture_pause wait event ret:-110 isp_id:0
+ispdrv_uninit 3747
+isp_vi_stop_capturing 2457
+isp_vi_stop_capturing 2460
+isp2_module_fini 6651, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+isp2_module_fini 6665, R00:0x0,R04:0x10e0780,R08:0x18000000,R0c:0x16007001,R10:0xfc0000,R14:0x0,R18:0x0,R1c:0x16800000,R20:0x0
+dma free vir:0xc4c16000, phy:0x80b38000, bytes=8568
+dma free vir:0xc4c11000, phy:0x80b34000, bytes=12624
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_uninit 3772, release main osd addr:   (null)
+ispdrv_uninit 3779, release main osd res ok
+ispdrv_uninit 3783, release sub osd addr:   (null)
+ispdrv_init 3712
+dma alloc vir:0xc4c11000, phy:0x80b34000
+isp_module_init: isp_drv_lib-V0.2.3-H3B
+isp2 module init: isp_struct size=48748, dma_area=0xc4c11000, dma_bytes=12624, io_base=f0010000
+dma alloc vir:0xc4c16000, phy:0x80b38000
+
+dual 8568B dma Addr:0x80b38000
+isp2_module_init cb:c0b17d3c, sensor_cb:c0fd8b18, reg_base:f0010000, isp_struct:c4c41000, isp_id:0
+isp_id:0
+all:2159230976-0
+stat:2159238800-0
+3d:0
+dual:2159247360-11763712
+isp_>blc_mode=1
+sc1345_cropcap bounds.width:1280, bounds.height:720
+sc1345_cropcap bounds.width:1280, bounds.height:720
+sc1345_s_crop 758, left:0, top:0, width:1280, height:720
+sc1345_cropcap bounds.width:1280, bounds.height:720
+isp_vi_set_crop sx:0,sy:0,w:1280,h:720
+isp_vo_set_main_channel_scale enter.(1920,1080,0,1280,720)
+[30039]:[capture_open]: [main@555] runtime 0xc0c5a800 
+[30039]:[snd_card_prepare]: DEV 1 -> L2: 3 
+[30039]:[adc_open]: opening: ADC2 0x0 Analog 0xdb8440d clkctrl 0x100409 
+[30072]:[analog_sethwparam]: SET_GAIN who 1 gain 3 
+[30072]:[analog_sethwparam]: SET_GAIN who 2 gain 3 
+[30072]:[analog_sethwparam]: SET_MUX mixer 1 src 2 
+[30072]:[capture_open]: successfully 
+[30090]:[playback_open]: [main@555] runtime 0xc0effc00 
+[30090]:[snd_card_prepare]: DEV 0 -> L2: 4 
+[30090]:[dac_open]: opening... 
+[30091]:[analog_sethwparam]: SET_GAIN who 0 gain 4 
+[30092]:[analog_sethwparam]: SET_MUX mixer 0 src 0 
+[30092]:[set_hp_power]: hp power:1 
+[30112]:[analog_sethwparam]: SPEAKER_CTRL 1 
+[30116]:[set_playback_param]: playback param prds 8 prdbyte 1024 ch 1 bit 16 rate 8000 
+[30116]:[playback_prepare]: hw buffer: 0xc082a000/0x2000 
+[30116]:[playback_prepare]: cache buffer: 0xc4c4e000/0x80000000 
+ak39ev330_clk: [sddac]core_pll=640000000, des_sample_rate=8000, div=312, osr=256, actual_sample_rate=8012
+[30116]:[dac_set_samplerate]: sddac_clk:8012 
+[30117]:[dac_cal_hsclk]: @dac_cal_hsclk, dachs_clk = 6000000 
+[30117]:[dac_set_highspeed]: set dachs_clk = 6000000 
+[30117]:[dac_set_highspeed]: get dachs_clk:6037735 end 
+[30117]:[playback_prepare]: rate 8000 actual_rate 8012 
+[30117]:[playback_resume:507]: start again 
+[30117]:[playback_start_dac:266]: dstsrc 0 
+[30117]:[analog_sethwparam]: SET_MUX mixer 0 src 0 
+[30117]:[ak_set_channel_source]: MIXER_OUT already @0 
+[30172]:[analog_sethwparam]: SET_MUX mixer 0 src 4 
+[30172]:[set_hp_power]: hp power:1 
+[30194]:[set_playback_source:613]: playback source:0 -> 4 
+[30194]:[set_playback_gain:659]: playback HP gain:3 
+[30194]:[analog_sethwparam]: SET_GAIN who 0 gain 3 
+set_interface mipi
+set_pinctrl_vi pinctrl_lookup_state couldn't find mipi0_1lane state
+set_pclk_polar pclk edge is falling
+isp_vi_apply_mode 2653 mode:5
+isp_vi_start_capturing 2341
+isp_vi_start_capturing  2343 isp_id:0
+isp_vi_start_capturing 2353 isp_id:0
+isp_vi_start_capturing 2356
+ae_fast is not set
+the ae_fast->isp_d_gain is not valid
+ae_fast->wb is not valid
+isp_vi_start_capturing 2417 isp_id:0
+isp_vi_start_capturing 2418, REG32(isp->base + REG_UPDATE)=0x16000000
+isp_vi_start_capturing 2422 isp_id:0
+isp_>blc_mode=1
+Reset MAC controller!
+phy read phy id1 waiting ok,data=0x937c
+phy read phy id2 waiting ok,data=0x4024
+cdh:id other set!
+Autonegotiation Failed
+eth0 owns a shared interrupt on netdev->irq 16
+setting up the cable unplug timer
+ak39ev330_clk: [sdadc]core_pll=640000000, des_sample_rate=8000, div=156, osr=512, actual_sample_rate=8012
+[69018]:[adc_set_samplerate]: sdadc_clk:8012 
+[69018]:[adc_set_highspeed]: adchs_clk:58181818 
+[69084]:[set_capture_param]: CH 1 PERD 8 BYTE 512 Total 0x0 bit 16 actual_rate 8012 
+[69084]:[capture_prepare]: hw buffer: 0xc0f38000/0x1000 
+[69084]:[capture_prepare]: successfully 
+[69084]:[capture_resume]: resume... 
+[69084]:[capture_start]: starting 
+[69084]:[analog_sethwparam]: SET_MUX mixer 1 src 2 
+[69084]:[snd_card_resume]: L2 status 0x0 
+[69155]:[capture_read]: notify_threshold 0x0 -> 0x200 
+ak_isp_set_user_params_do 1669 paddr:833b6000 size:8192 
+SUBCHN0 iomap c33b5000 833b5000 size:4096

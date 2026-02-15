@@ -1,0 +1,236 @@
+====/etc/init.d/4g_led_control.sh
+#!/bin/sh
+if [ $1 == "upgrade" ];then
+    if [ -f "/rom/device.config" ]; then
+        tmp="`cat /rom/device.config | grep support_4g_dev_status_led=1`"
+        echo "tmp=$tmp"
+        if [ $tmp ]; then
+            # red
+            echo 9 > /sys/class/gpio/export
+            echo out > /sys/class/gpio/gpio9/direction
+            echo 0 > /sys/class/gpio/gpio9/value
+            # green
+            echo 5 > /sys/class/gpio/export
+            echo out > /sys/class/gpio/gpio5/direction
+            echo 0 > /sys/class/gpio/gpio5/value
+            sleep 1
+            while :
+            do
+                    echo 1 > /sys/class/gpio/gpio9/value
+                    echo 0 > /sys/class/gpio/gpio5/value
+                    sleep 0.5
+                    echo 0 > /sys/class/gpio/gpio9/value
+                    echo 1 > /sys/class/gpio/gpio5/value
+                    sleep 0.5
+                # fi
+            done
+        fi
+    fi
+else
+    if [ -f "/rom/device.config" ]; then
+        tmp="`cat /rom/device.config | grep support_4g_dev_status_led=1`"
+        echo "tmp=$tmp"
+        if [ $tmp ]; then
+            # red
+            echo 9 > /sys/class/gpio/export
+            echo out > /sys/class/gpio/gpio9/direction
+            echo 0 > /sys/class/gpio/gpio9/value
+            sleep 1
+            while :
+            do
+                # _tmp_ret="`ps | grep "{main} /ipc/ipc" | grep -v "grep"`"
+                # if [ -n "$_tmp_ret" ];then
+                #     #echo 0 > /sys/class/gpio/gpio9/value
+                #     echo "/ipc/ipc open success , will exit flashing red led "
+                #     #exit 0
+                #     sleep 1
+                # else
+                    echo 1 > /sys/class/gpio/gpio9/value
+                    sleep 0.5
+                    echo 0 > /sys/class/gpio/gpio9/value
+                    sleep 0.5
+                # fi
+            done
+        fi
+    fi
+fi
+====/etc/init.d/rc.local
+#!/bin/sh
+
+#print kernel error default
+echo 4 > /proc/sys/kernel/printk
+#echo 8 > /proc/sys/kernel/printk
+
+# mount jffs2 file-system. 
+/bin/mount -t jffs2 /dev/mtdblock6 /rom
+# note: can't recommend running other app before `mount` command.
+
+mkdir /mnt/ramdisk
+mkdir /mnt/disc1
+/bin/mount -t tmpfs tmpfs /mnt/ramdisk
+
+cp -R /etc/* /mnt/ramdisk
+/bin/mount --bind /mnt/ramdisk/ /etc/
+
+mkdir /mnt/ramdisk/tmp
+/bin/mount --bind /mnt/ramdisk/tmp /tmp
+
+#start syslogd & klogd, log rotated 3 files(200KB) to /var/log/messages
+syslogd -D -n -O /var/log/messages -s 200 -b 3 & # -l prio
+klogd -n & # -c prio
+
+#create ramdisk
+ifconfig lo 127.0.0.1
+
+dmesg > /tmp/start_message
+
+echo "/tmp/core_%e_%p_%t" > /proc/sys/kernel/core_pattern
+#start system service
+
+#tf card
+insmod /lib/modules/mmc_core.ko
+insmod /lib/modules/mmc_block.ko
+# echo "sleep 10 before insmod ak_mci.ko"
+# sleep 10
+insmod /lib/modules/ak_mci.ko
+# echo "insmod ak_mci.ko done"
+insmod /lib/modules/exfat.ko
+# No need for this operation
+#echo 1 > /sys/mmc_en/mmc0_card_pwr_en
+sleep 2
+
+echo 81 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio81/direction
+RESETKEY=`cat /sys/class/gpio/gpio81/value`
+if [ $RESETKEY -eq "0" ]; then 
+  echo "Detected reset button has been pressed."
+ 
+  i=1 
+  while [ $i -le 6 ]
+  do 
+    if  [ -b /dev/mmcblk0p1 ]; then
+      break
+    fi
+    let i++
+    sleep 1
+  done
+
+  if [ -b /dev/mmcblk0p1 ]; then
+    echo "Detected TF Card"
+    cd /
+    mount /dev/mmcblk0p1 /mnt/disc1
+
+    if [ $? -eq 0 ]; then
+      echo "mount sdcard ok"
+      if [ -f /mnt/disc1/gwell_config/custom_setting.ini ]; then
+        echo "Detected custom_setting.ini"
+        cp /mnt/disc1/gwell_config/custom_setting.ini /rom/device.config
+      fi 
+
+      if [ -f /mnt/disc1/upg.bin.enc ]; then  
+        echo "Detected /mnt/disc1/upg.bin.enc"
+        ln -s /mnt/disc1/upg.bin.enc /tmp/upg.bin.enc
+        gwellupdater.sh /tmp/upg.bin.enc
+        if [ 0 -eq 0 ]; then 
+          exit
+        else
+          rm -f /tmp/*
+        fi
+      fi
+    fi
+    umount /mnt/disc1/
+  fi
+fi 
+echo 81 > /sys/class/gpio/unexport
+
+# mount usr file-system. 
+/bin/mount -t squashfs /dev/mtdblock7 /ipc
+if [ ! $? ]; then
+  ./etc/init.d/4g_led_control.sh &
+fi
+/bin/mount --bind /ipc /usr
+
+i=1 
+while [ $i -le 3 ]
+do 
+  if  [ -b /dev/mmcblk0p1 ]; then
+    echo "Detected TF card"
+    break
+  fi
+  let i++
+  sleep 1
+done
+
+if [ -b /dev/mmcblk0p1 ]; then
+  cp -r /ipc/ /tmp/
+  if [ $? -eq 0 -a -e /ipc/ipc ]; then
+    rm -r /tmp/ipc
+    echo 3 > /proc/sys/vm/drop_caches
+    echo 1024 > /proc/sys/vm/min_free_kbytes
+    /ipc/setup.sh
+  else
+    echo "ipc error, app mtd maybe error"
+    rm -r /tmp/ipc
+    echo 3 > /proc/sys/vm/drop_caches
+    cd /
+    mount /dev/mmcblk0p1 /mnt/disc1
+
+    if [ $? -eq 0 ]; then
+      echo "TF card mount ok"
+      if [ -f /mnt/disc1/upg.bin.enc ]; then
+        echo "Detected /mnt/disc1/upg.bin.enc"
+        ln -s /mnt/disc1/upg.bin.enc /tmp/upg.bin.enc
+        gwellupdater.sh /tmp/upg.bin.enc
+      else
+        echo "No upg.bin.enc"
+		    ./etc/init.d/4g_led_control.sh &
+      fi
+    fi
+    umount /mnt/disc1/
+  fi
+else
+  cp -r /ipc/ /tmp/
+  if [ $? -eq 0 -a -e /ipc/ipc ]; then
+    rm -r /tmp/ipc
+    echo 3 > /proc/sys/vm/drop_caches
+    echo 1024 > /proc/sys/vm/min_free_kbytes
+    /ipc/setup.sh
+  else
+    echo "ipc error, app mtd maybe error"
+    rm -r /tmp/ipc
+    echo 3 > /proc/sys/vm/drop_caches
+    cd /
+    ./etc/init.d/4g_led_control.sh &
+  fi
+  
+fi
+
+====/etc/init.d/rcS
+#! /bin/sh
+
+echo "mount all file system..."
+mkdir /dev/pts
+/bin/mount -av
+
+runlevel=S
+prevlevel=N
+umask 022
+export runlevel prevlevel
+
+echo "starting mdev..."
+/bin/echo /sbin/mdev > /proc/sys/kernel/hotplug
+mdev -s
+
+mkdir /var/cache
+mkdir /var/run
+mkdir /var/log
+mkdir /var/spool
+
+echo "**************************"
+echo "    Love Linux ! ! ! "
+echo "**************************"
+
+/bin/hostname -F /etc/sysconfig/HOSTNAME
+
+#local service
+/etc/init.d/rc.local

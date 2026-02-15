@@ -1,0 +1,14 @@
+[system]
+telnetd=1
+debug=1
+shell_debug=1
+enable_telnet=1
+
+[network]
+telnet=1
+ssh=1
+
+[debug]
+enable=1
+telnet=1
+console=1

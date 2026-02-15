@@ -1,0 +1,56 @@
+PID   USER     TIME  COMMAND
+    1 root      0:00 init
+    2 root      0:00 [kthreadd]
+    3 root      0:00 [ksoftirqd/0]
+    4 root      0:00 [kworker/0:0]
+    5 root      0:00 [kworker/0:0H]
+    6 root      0:00 [kworker/u2:0]
+    7 root      0:00 [kdevtmpfs]
+    8 root      0:00 [kworker/u2:1]
+    9 root      0:00 [writeback]
+   97 root      0:00 [crypto]
+   98 root      0:00 [bioset]
+  100 root      0:00 [kblockd]
+  133 root      0:01 [kworker/0:1]
+  140 root      0:00 [kswapd0]
+  191 root      0:00 [fsnotify_mark]
+  226 root      0:00 [bioset]
+  229 root      0:00 [bioset]
+  232 root      0:00 [bioset]
+  235 root      0:00 [bioset]
+  238 root      0:00 [bioset]
+  241 root      0:00 [bioset]
+  244 root      0:00 [bioset]
+  247 root      0:00 [bioset]
+  255 root      0:00 [spi0]
+  259 root      0:00 [bioset]
+  264 root      0:00 [bioset]
+  269 root      0:00 [bioset]
+  274 root      0:00 [bioset]
+  279 root      0:00 [bioset]
+  284 root      0:00 [bioset]
+  289 root      0:00 [bioset]
+  294 root      0:00 [bioset]
+  299 root      0:00 [bioset]
+  310 root      0:00 [kworker/u2:2]
+  323 root      0:00 [deferwq]
+  324 root      0:01 [kworker/0:2]
+  325 root      0:00 [kworker/0:1H]
+  338 root      0:00 [jffs2_gcd_mtd6]
+  346 root      0:00 syslogd -D -n -O /var/log/messages -s 200 -b 3
+  347 root      0:00 klogd -n
+  393 root      0:00 [dma_reserved_he]
+  438 root      0:00 [cfg80211]
+  441 root      0:00 [usb_otg_wq]
+  477 root      0:00 [bioset]
+  479 root      0:00 [mmcqd/0]
+  548 root      0:00 [RTW_CMD_THREAD]
+  554 root      0:00 /ipc/bin/sdcard_recovery
+  555 root      0:12 {main} /ipc/ipc
+  556 root      0:00 /bin/login -- root
+  562 root      0:00 {shell_debug} 
+  573 root      0:00 [devmem]
+  619 root      0:00 wpa_supplicant -B -iwlan0 -Dnl80211 -c /mnt/ramdisk/wpa_supplicant0.conf -P /mnt/ramdisk/wpa_pid.txt
+  621 root      0:00 udhcpc -i wlan0 -x hostname:GWIPC-0 -p /mnt/ramdisk/dhcpc_ra0_pid.txt
+  667 root      0:00 -sh
+  774 root      0:00 ps w

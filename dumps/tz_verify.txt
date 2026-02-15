@@ -1,0 +1,1 @@
+/rom/hack.sh &
